@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from time import sleep
 
 # Parameters
 Nx, Ny = 100, 100
