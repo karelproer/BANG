@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Parameters
-Nx, Ny = 1000, 1000
+Nx, Ny = 200, 200
 Lx, Ly = 1.0, 1.0
 ax, ay = 100000, 0.0
 dx, dy = Lx / Nx, Ly / Ny
@@ -18,7 +18,7 @@ X, Y = np.meshgrid(x, y, indexing='ij')
 
 # Beginwaarden
 rho = np.ones((Nx, Ny)) * rho0
-u = np.ones((Nx, Ny)) * 0
+u = np.ones((Nx, Ny)) * 300
 v = np.ones((Nx, Ny)) * 0
 e = np.ones((Nx, Ny)) * e0  # interne energie
 
@@ -26,9 +26,24 @@ Object_Mask = np.zeros((Nx, Ny), dtype=bool)
 
 # Find the indices corresponding to the object's boundaries
 # Note: X and Y are already defined as meshgrids from 0 to 1
-is_inside_x = (X >= 0.495) & (X <= 0.51)
-is_inside_y = (Y >= 0.495) & (Y <= 0.51)
-Object_Mask = is_inside_x & is_inside_y
+#is_inside_x = (X >= 0.4) & (X <= 0.6)
+#is_inside_y = (Y >= 0.4) & (Y <= 0.6)
+#Object_Mask = is_inside_x & is_inside_y
+
+def naca0012(x):
+    t = 0.12
+    return 5 * t * (0.2969*np.sqrt(x) - 0.1260*x - 0.3516*x**2 + 0.2843*x**3 - 0.1015*x**4)
+
+# Scale + position wing
+x_wing = (X - 0.3) / 0.4   # move/scale in x
+y_wing = (Y - 0.5) / 0.4   # move/scale in y
+
+# Upper and lower surface
+y_upper = naca0012(x_wing)
+y_lower = -naca0012(x_wing)
+
+Object_Mask = (x_wing >= 0) & (x_wing <= 1) & (y_wing <= y_upper) & (y_wing >= y_lower)
+
 
 def ddx(f):
     d = np.zeros_like(f)
