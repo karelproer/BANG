@@ -2,9 +2,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Parameters
-Nx, Ny = 200, 200
+Nx, Ny = 300, 300
 Lx, Ly = 1.0, 1.0
-ax, ay = 100000, 0.0
+ax, ay = 0, 0.0
 dx, dy = Lx / Nx, Ly / Ny
 dt = 0.00000001 # in seconden
 Nt = 400000
@@ -18,7 +18,7 @@ X, Y = np.meshgrid(x, y, indexing='ij')
 
 # Beginwaarden
 rho = np.ones((Nx, Ny)) * rho0
-u = np.ones((Nx, Ny)) * 300
+u = np.ones((Nx, Ny)) * 450
 v = np.ones((Nx, Ny)) * 0
 e = np.ones((Nx, Ny)) * e0  # interne energie
 
@@ -35,8 +35,8 @@ def naca0012(x):
     return 5 * t * (0.2969*np.sqrt(x) - 0.1260*x - 0.3516*x**2 + 0.2843*x**3 - 0.1015*x**4)
 
 # Scale + position wing
-x_wing = (X - 0.3) / 0.4   # move/scale in x
-y_wing = (Y - 0.5) / 0.4   # move/scale in y
+x_wing = (X - 0.3) / 0.5   # move/scale in x
+y_wing = (Y - 0.5) / 0.5   # move/scale in y
 
 # Upper and lower surface
 y_upper = naca0012(x_wing)
