@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Parameters
-Nx, Ny = 100, 100
+Nx, Ny = 1000, 1000
 Lx, Ly = 1.0, 1.0
 ax, ay = 100000, 0.0
 dx, dy = Lx / Nx, Ly / Ny
