@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from aerofoil import *
 
 # Parameters
-Nx, Ny = 200,200
+Nx, Ny = 300,300
 Lx, Ly = 1.0, 1.0
 ax, ay = 0, 0.0
 dx, dy = Lx / Nx, Ly / Ny
@@ -31,7 +31,7 @@ Object_Mask = np.zeros((Nx, Ny), dtype=bool)
 #is_inside_y = (Y >= 0.4) & (Y <= 0.6)
 #Object_Mask = is_inside_x & is_inside_y
 
-Object_Mask= object_mask()
+Object_Mask= object_mask(Nx, Ny, Lx, Ly)
 
 def ddx(f):
     d = np.zeros_like(f)

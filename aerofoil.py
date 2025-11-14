@@ -2,10 +2,8 @@ import numpy as np
 
 
 
-def object_mask():
+def object_mask(Nx, Ny, Lx, Ly):
     # Rooster
-    Nx, Ny = 200,200
-    Lx, Ly = 1.0, 1.0
     x = np.linspace(0, Lx, Nx)
     y = np.linspace(0, Ly, Ny)
     X, Y = np.meshgrid(x, y, indexing='ij')
