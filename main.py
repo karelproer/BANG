@@ -9,7 +9,7 @@ Nx, Ny = 300,300
 Lx, Ly = 1.0, 1.0
 ax, ay = 0, 0.0
 dx, dy = Lx / Nx, Ly / Ny
-dt = 0.00000000001 # in seconden
+dt = 0.000001 # in seconden
 Nt = 400000
 gamma = 1.4
 rho0, e0 = 1, 214_000
@@ -21,12 +21,7 @@ X, Y = np.meshgrid(x, y, indexing='ij')
 
 Object_Mask= object_mask(Nx, Ny, Lx, Ly)
 
-
-
-
-sim = Simluation((1.0, 1.0), (Nx, Ny), 1.4, 1, 214_000, (500, 0), Object_Mask)
-
-
+sim = Simluation((1.0, 1.0), (Nx, Ny), 1.4, 1, 214_000, (300, 0), Object_Mask)
 
 # Visualisatie setup
 plt.ion()
