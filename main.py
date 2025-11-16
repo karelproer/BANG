@@ -13,13 +13,14 @@ dt = 0.000001 # in seconden
 Nt = 400000
 gamma = 1.4
 rho0, e0 = 1, 214_000
+rot_deg = -90
 
 # Rooster
 x = np.linspace(0, Lx, Nx)
 y = np.linspace(0, Ly, Ny)
 X, Y = np.meshgrid(x, y, indexing='ij')
 
-Object_Mask= object_mask(Nx, Ny, Lx, Ly)
+Object_Mask= object_mask(Nx, Ny, Lx, Ly, rot_deg)
 
 sim = Simluation((1.0, 1.0), (Nx, Ny), 1.4, 1, 214_000, (600, 0), Object_Mask)
 

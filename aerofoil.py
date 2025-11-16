@@ -1,6 +1,6 @@
 import numpy as np
 
-def object_mask(Nx, Ny, Lx, Ly):
+def object_mask(Nx, Ny, Lx, Ly, rot_deg):
     # Rooster
     x = np.linspace(0, Lx, Nx)
     y = np.linspace(0, Ly, Ny)
@@ -13,10 +13,24 @@ def object_mask(Nx, Ny, Lx, Ly):
     T = 0.12 # Max thickness
     a0, a1, a2, a3, a4 = 0.2969, -0.126, -0.3156, 0.2843, -0.1036 #standaard waarden
 
-    # Scale + position wing
-    x_wing = (X - 0.3) / 0.5   # move/scale in x
-    y_wing = (Y - 0.5) / 0.5   # move/scale in y
+    # rotation angle
+    alpha = np.deg2rad(rot_deg)
 
+    # tip of wing before scaling
+    x0, y0 = 0.3, 0.5
+
+    # shift to center
+    Xs = X - x0
+    Ys = Y - y0
+
+    # rotate grid into wing coordinates
+    Xr =  Xs*np.cos(alpha) + Ys*np.sin(alpha)
+    Yr = -Xs*np.sin(alpha) + Ys*np.cos(alpha)
+
+    # scale
+    x_wing = Xr / 0.5
+    y_wing = Yr / 0.5
+  
     # make safe copy to avoid sqrt issues at x=0
     xch = np.clip(x_wing, 0.0, 1.0)
 
