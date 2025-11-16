@@ -1,7 +1,5 @@
 import numpy as np
 
-
-
 def object_mask(Nx, Ny, Lx, Ly):
     # Rooster
     x = np.linspace(0, Lx, Nx)

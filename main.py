@@ -21,7 +21,7 @@ X, Y = np.meshgrid(x, y, indexing='ij')
 
 Object_Mask= object_mask(Nx, Ny, Lx, Ly)
 
-sim = Simluation((1.0, 1.0), (Nx, Ny), 1.4, 1, 214_000, (300, 0), Object_Mask)
+sim = Simluation((1.0, 1.0), (Nx, Ny), 1.4, 1, 214_000, (600, 0), Object_Mask)
 
 # Visualisatie setup
 plt.ion()

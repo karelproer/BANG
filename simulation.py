@@ -22,7 +22,6 @@ class Simluation:
     def dxy(self):
         return self.size[0] / self.pixels[0], self.size[1] / self.pixels[1]
 
-
     def step(self, dt):
         self.p = np.multiply(self.rho, self.e) * (self.gamma - 1)
         drho_dx, drho_dy = ddxy(self.rho, self.dxy)
