@@ -10,6 +10,10 @@ class Simluation:
         self.e0 = e0
         self.object_mask = object_mask
 
+        self.mu = 1.8e-5        # Dynamic viscosity (e.g., for air)
+        self.Pr = 0.72          # Prandtl number for air
+        self.kappa = self.mu * self.gamma / self.Pr # Thermal conductivity (simplified)
+
         self.time = 0
 
         self.rho = np.ones(pixels) * rho0
@@ -23,7 +27,7 @@ class Simluation:
     def dxy(self):
         return self.size[0] / self.pixels[0], self.size[1] / self.pixels[1]
 
-    def d(self, vars):
+    """def d(self, vars):
         #implementatie euler vergelijkingen.
         #hier eventueel veranderen naar navier-stokes.
         rho, u, v, e = vars[0], vars[1], vars[2], vars[3]
@@ -44,6 +48,53 @@ class Simluation:
         dv_dt = -(self.u * dv_dx + v * dv_dy + dp_dy / rho - Fy)
         de_dt = -(self.u * de_dx + v * de_dy + p / rho * div_u)
 
+        return np.array([drho_dt, du_dt, dv_dt, de_dt]) """
+
+    def d(self, vars):
+        # Retrieve current state variables
+        rho, u, v, e = vars[0], vars[1], vars[2], vars[3]
+        p = np.multiply(rho, e) * (self.gamma - 1)
+
+        # --- 1. Calculate First Derivatives (Same as Euler) ---
+        drho_dx, drho_dy = ddxy(rho, self.dxy)
+        du_dx, du_dy = ddxy(u, self.dxy)
+        dv_dx, dv_dy = ddxy(v, self.dxy)
+        dp_dx, dp_dy = ddxy(p, self.dxy)
+        de_dx, de_dy = ddxy(e, self.dxy)
+
+        div_u = du_dx + dv_dy
+
+        # --- 2. Calculate Second Derivatives (New for Navier-Stokes) ---
+        # These functions must respect your boundary conditions (e.g., zero gradient)
+        laplace_u = laplacian(u, self.dxy)
+        laplace_v = laplacian(v, self.dxy)
+        laplace_e = laplacian(e, self.dxy)
+        
+        # You will also need d/dx(div_u) and d/dy(div_u) for the full V_u, V_v terms
+        ddiv_u_dx, ddiv_u_dy = ddxy(div_u, self.dxy)
+
+        # --- 3. Calculate Viscous Terms (V_u, V_v, V_e) ---
+        # Simplified viscous terms for momentum (using Stokes' hypothesis, lambda = -2/3*mu)
+        viscous_u_force = (self.mu / rho) * (laplace_u + (1/3) * ddiv_u_dx)
+        viscous_v_force = (self.mu / rho) * (laplace_v + (1/3) * ddiv_u_dy)
+        
+        # Viscous term for energy (heat conduction)
+        viscous_e_term = (self.kappa / rho) * laplace_e
+        
+        # --- 4. Time Derivatives (Euler terms + Viscous terms) ---
+        Fx, Fy = rho * 30000, rho * 0 # Fx and Fy are your body forces (e.g., acceleration)
+
+        # Mass conservation remains the same (viscosity does not affect mass)
+        drho_dt = -(self.u * drho_dx + v * drho_dy + rho * div_u)
+        
+        # Momentum (Euler + Viscous Force)
+        # The term is added because the viscous stress is a *force* acting on the fluid.
+        du_dt = -(self.u * du_dx + v * du_dy + dp_dx / rho - Fx) + viscous_u_force
+        dv_dt = -(self.u * dv_dx + v * dv_dy + dp_dy / rho - Fy) + viscous_v_force
+        
+        # Energy (Euler + Heat Conduction)
+        de_dt = -(self.u * de_dx + v * de_dy + p / rho * div_u) + viscous_e_term
+    
         return np.array([drho_dt, du_dt, dv_dt, de_dt])
 
     def rk4(self, u, h):
@@ -81,7 +132,7 @@ class Simluation:
         self.uv = np.sqrt((np.square(u_new) + np.square(v_new)))    
         self.c = np.sqrt(np.clip(self.gamma*self.p/np.clip(rho_new, a_min=0.1, a_max=100), a_min=0, a_max=1000_000_000))
 
-        nu = 0.01 * self.dxy[0] * (self.uv + self.c)
+        nu = 0.005 * self.dxy[0] * (self.uv + self.c)
         for m in [rho_new, u_new, v_new, e_new]:
             # Calculate Laplacian (diffusion) using slicing
             laplacian = np.zeros_like(m)

@@ -16,3 +16,7 @@ def ddy(f, dy):
 
 def ddxy(f, dxy):
     return ddx(f, dxy[0]), ddy(f, dxy[1])
+
+def laplacian(f, dxy):
+    grad_x, grad_y = ddx(f, dxy[0]), ddy(f, dxy[1])
+    return ddx(grad_x, dxy[0]) + ddy(grad_y, dxy[1])
