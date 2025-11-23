@@ -9,9 +9,9 @@ def object_mask(Nx, Ny, Lx, Ly, rot_deg):
     Object_Mask = np.zeros((Nx, Ny), dtype=bool)
 
     M = 0.06 # Max camber %
-    P = 0.3  # Max camber position in %
+    P = 0.4  # Max camber position in %
     T = 0.12 # Max thickness
-    a0, a1, a2, a3, a4 = 0.2969, -0.126, -0.3156, 0.2843, -0.1036 #standaard waarden
+    a0, a1, a2, a3, a4 = 0.2969, -0.126, -0.3156, 0.2843, -0.1015 #standaard waarden
 
     # rotation angle
     alpha = np.deg2rad(rot_deg)
