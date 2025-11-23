@@ -15,6 +15,7 @@ class Simluation:
         self.rho = np.ones(pixels) * rho0
         self.u = np.ones(pixels) * v0[0]
         self.v = np.ones(pixels) * v0[1]
+        self.uv = np.sqrt((np.square(self.u) + np.square(self.v)))
         self.e = np.ones(pixels) * e0  # interne energie
         self.p = np.multiply(self.rho, self.e) * (self.gamma - 1)
 
@@ -22,9 +23,43 @@ class Simluation:
     def dxy(self):
         return self.size[0] / self.pixels[0], self.size[1] / self.pixels[1]
 
+    def d(self, vars):
+        #implementatie euler vergelijkingen.
+        #hier eventueel veranderen naar navier-stokes.
+        rho, u, v, e = vars[0], vars[1], vars[2], vars[3]
+        p = np.multiply(rho, e) * (self.gamma - 1)
+
+        drho_dx, drho_dy = ddxy(rho, self.dxy)
+        du_dx, du_dy = ddxy(u, self.dxy)
+        dv_dx, dv_dy = ddxy(v, self.dxy)
+        dp_dx, dp_dy = ddxy(p, self.dxy)
+        de_dx, de_dy = ddxy(e, self.dxy)
+
+        div_u = du_dx + dv_dy
+
+        Fx, Fy = rho * 300, rho * 0
+
+        drho_dt = -(self.u * drho_dx + v * drho_dy + rho * div_u)
+        du_dt = -(self.u * du_dx + v * du_dy + dp_dx / rho - Fx)
+        dv_dt = -(self.u * dv_dx + v * dv_dy + dp_dy / rho - Fy)
+        de_dt = -(self.u * de_dx + v * de_dy + p / rho * div_u)
+
+        return np.array([drho_dt, du_dt, dv_dt, de_dt])
+
+    def rk4(self, u, h):
+        # moet beter zijn dan direct euler
+        k1 = self.d(u)
+        k2 = self.d(u + h*k1/2)
+        k3 = self.d(u + h*k2/2)
+        k4 = self.d(u + h*k3)
+        return u + h/6*(k1 + 2*k2 + 2+k3 + k4)
+
     def step(self, dt):
+        variables = np.array([self.rho, self.u, self.v, self.e])
+
         self.p = np.multiply(self.rho, self.e) * (self.gamma - 1)
-        drho_dx, drho_dy = ddxy(self.rho, self.dxy)
+
+        """drho_dx, drho_dy = ddxy(self.rho, self.dxy)
         du_dx, du_dy = ddxy(self.u, self.dxy)
         dv_dx, dv_dy = ddxy(self.v, self.dxy)
         dp_dx, dp_dy = ddxy(self.p, self.dxy)
@@ -32,15 +67,18 @@ class Simluation:
 
         div_u = du_dx + dv_dy
 
-        Fx, Fy = self.rho0 * 0, self.rho0 * 0
+        Fx, Fy = self.rho0 * 300000, self.rho0 * 0
 
         # Tijdstappen (expliciet Euler)
         rho_new = self.rho - dt * (self.u * drho_dx + self.v * drho_dy + self.rho * div_u)
         u_new = self.u - dt * (self.u * du_dx + self.v * du_dy + dp_dx / self.rho - Fx)
         v_new = self.v - dt * (self.u * dv_dx + self.v * dv_dy + dp_dy / self.rho - Fy)
         e_new = self.e - dt * (self.u * de_dx + self.v * de_dy + self.p / self.rho * div_u)
-        
-        self.uv = np.sqrt((np.square(u_new) + np.square(v_new)))
+        """
+        variables = self.rk4(variables, dt)
+        rho_new, u_new, v_new, e_new = variables[0], variables[1], variables[2], variables[3]
+
+        self.uv = np.sqrt((np.square(u_new) + np.square(v_new)))    
         self.c = np.sqrt(np.clip(self.gamma*self.p/np.clip(rho_new, a_min=0.1, a_max=100), a_min=0, a_max=1000_000_000))
 
         nu = 0.01 * self.dxy[0] * (self.uv + self.c)
