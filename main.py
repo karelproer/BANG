@@ -5,7 +5,7 @@ from derivatives import *
 from simulation import Simluation
 
 # Parameters
-Nx, Ny = 200,200
+Nx, Ny = 300,300
 Lx, Ly = 1.0, 1.0
 ax, ay = 0, 0.0
 dx, dy = Lx / Nx, Ly / Ny
