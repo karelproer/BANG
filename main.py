@@ -5,7 +5,7 @@ from derivatives import *
 from simulation import Simluation
 
 # Parameters
-Nx, Ny = 300,300
+Nx, Ny = 200,200
 Lx, Ly = 1.0, 1.0
 ax, ay = 0, 0.0
 dx, dy = Lx / Nx, Ly / Ny
@@ -22,7 +22,7 @@ X, Y = np.meshgrid(x, y, indexing='ij')
 
 Object_Mask= object_mask(Nx, Ny, Lx, Ly, rot_deg)
 
-sim = Simluation((Lx, Ly), (Nx, Ny), 1.4, 1, 214_000, (30, 0), Object_Mask)
+sim = Simluation((Lx, Ly), (Nx, Ny), 1.4, 1, 214_000, (10, 0), Object_Mask)
 
 # Visualisatie setup
 plt.ion()
@@ -38,15 +38,14 @@ plt.colorbar(im2, ax=ax2)
 im3 = ax3.imshow(sim.u.T, origin='lower', extent=[0, Lx, 0, Ly], cmap='inferno', vmin=0, vmax=1)
 ax3.set_title("Speed")
 plt.colorbar(im3, ax=ax3)
+text = fig.text(0.5, 0.01, "", ha='center', va='bottom', fontsize=12, color='blue')
 
 for n in range(Nt):
     sim.step(dt)
 
-    #Fx, Fy = rho * ax, rho * ay
-
     t = n * dt
     # Update plots elke paar stappen
-    if n % 10 == 0:
+    if n % 1 == 0:
         im1.set_clim([sim.rho.min(), sim.rho.max()])
         im2.set_clim([sim.e.min(), sim.e.max()])
         im3.set_clim([sim.u.min(), sim.u.max()])
@@ -57,7 +56,9 @@ for n in range(Nt):
         ax2.set_title(f"Internal Energy at t = {t:.5f}s")
         im3.set_data(sim.u.T)
         ax3.set_title(f"Speed at t = {t:.5f}s")
-        plt.pause(0.0001)        
+        text.set_text(f"Drag = {sim.drag:.2f} N     Lift = {sim.lift:.2f} N")
+
+        plt.pause(0.0000001)        
         
 plt.ioff()
 
