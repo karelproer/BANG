@@ -35,7 +35,7 @@ def object_mask(Nx, Ny, Lx, Ly, rot_deg):
     xch = np.clip(x_wing, 0.0, 1.0)
 
     # camber yc (piecewise) - vectorized
-    if M != 0:
+    if M != 0 and P != 0:
         yc = np.zeros_like(xch)
         left = xch <= P
         right = ~left
