@@ -82,7 +82,7 @@ class Simluation:
         viscous_e_term = (self.kappa / rho) * laplace_e
         
         # --- 4. Time Derivatives (Euler terms + Viscous terms) ---
-        Fx, Fy = rho * 30000, rho * 0 # Fx and Fy are your body forces (e.g., acceleration)
+        Fx, Fy = rho * 0, rho * 0 # Fx and Fy are your body forces (e.g., acceleration)
 
         # Mass conservation remains the same (viscosity does not affect mass)
         drho_dt = -(self.u * drho_dx + v * drho_dy + rho * div_u)

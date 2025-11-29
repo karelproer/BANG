@@ -1,25 +1,25 @@
 import numpy as np
 
 def object_mask(Nx, Ny, Lx, Ly, rot_deg):
-    # Rooster
+    # Raster
     x = np.linspace(0, Lx, Nx)
     y = np.linspace(0, Ly, Ny)
     X, Y = np.meshgrid(x, y, indexing='ij')
 
     Object_Mask = np.zeros((Nx, Ny), dtype=bool)
 
-    M = 0.06 # Max camber %
-    P = 0.4  # Max camber position in %
-    T = 0.12 # Max thickness
-    a0, a1, a2, a3, a4 = 0.2969, -0.126, -0.3156, 0.2843, -0.1015 #standaard waarden
+    M = 0.06 # Maximaal camber in %
+    P = 0.40  # Maximaal camber positie in %
+    T = 0.12 # Maximale dikte in %
+    a0, a1, a2, a3, a4 = 0.2969, -0.126, -0.3156, 0.2843, -0.1015 #standaard NACA waarden
 
-    # rotation angle
+    # draaing van graden naar radialen
     alpha = np.deg2rad(rot_deg)
 
-    # tip of wing before scaling
+    # Wingtip locatie
     x0, y0 = 0.3, 0.5
 
-    # shift to center
+    # Naar midden verschuiven
     Xs = X - x0
     Ys = Y - y0
 
@@ -27,27 +27,28 @@ def object_mask(Nx, Ny, Lx, Ly, rot_deg):
     Xr =  Xs*np.cos(alpha) + Ys*np.sin(alpha)
     Yr = -Xs*np.sin(alpha) + Ys*np.cos(alpha)
 
-    # scale
+    # schaal
     x_wing = Xr / 0.5
     y_wing = Yr / 0.5
   
     # make safe copy to avoid sqrt issues at x=0
     xch = np.clip(x_wing, 0.0, 1.0)
 
-    # camber yc (piecewise) - vectorized
     if M != 0 and P != 0:
+        #voor niet-symmetrische vleugels
+        # camber berekenen
         yc = np.zeros_like(xch)
         left = xch <= P
         right = ~left
         yc[left]  = (M / (P**2)) * (2*P*xch[left] - xch[left]**2)
         yc[right] = (M / ((1-P)**2)) * ((1 - 2*P) + 2*P*xch[right] - xch[right]**2)
 
-        # derivative dyc/dx (piecewise)
+        # gradient berekenen
         dyc_dx = np.zeros_like(xch)
         dyc_dx[left]  = (2*M / (P**2)) * (P - xch[left])
         dyc_dx[right] = (2*M / ((1-P)**2)) * (P - xch[right])
 
-        # thickness distribution 
+        # Dikte verspreiding volgens standaard waarden 
         yt = (T / 0.2) * (
             a0 * np.sqrt(xch) +
             a1 * xch +
@@ -68,16 +69,17 @@ def object_mask(Nx, Ny, Lx, Ly, rot_deg):
         Object_Mask = (x_lower >= 0) & (x_upper <= 1) & (y_wing >= y_lower) & (y_wing <= y_upper)
 
     if M == 0:
-        def naca0012(x):
+        #Voor symmetrische vleugels
+        def naca00xx(x):
             return 5 * T * (0.2969*np.sqrt(x) - 0.1260*x - 0.3516*x**2 + 0.2843*x**3 - 0.1015*x**4)
 
-        # Scale + position wing
+        # Schaal + positie vleugel
         x_wing = (X - 0.3) / 0.5   # move/scale in x
         y_wing = (Y - 0.5) / 0.5   # move/scale in y
 
-        # Upper and lower surface
-        y_upper = naca0012(x_wing)
-        y_lower = -naca0012(x_wing)
+        # Bovenste en onderste oppervlakte
+        y_upper = naca00xx(x_wing)
+        y_lower = -naca00xx(x_wing)
 
         Object_Mask = (x_wing >= 0) & (x_wing <= 1) & (y_wing <= y_upper) & (y_wing >= y_lower) 
 
