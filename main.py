@@ -5,7 +5,7 @@ from derivatives import *
 from simulation import Simluation
 
 # Parameters
-Nx, Ny = 200,200
+Nx, Ny = 300,300 #pixels
 Lx, Ly = 1.0, 1.0
 ax, ay = 0, 0.0
 dx, dy = Lx / Nx, Ly / Ny
@@ -22,7 +22,7 @@ X, Y = np.meshgrid(x, y, indexing='ij')
 
 Object_Mask= object_mask(Nx, Ny, Lx, Ly, rot_deg)
 
-sim = Simluation((Lx, Ly), (Nx, Ny), 1.4, 1, 214_000, (10, 0), Object_Mask)
+sim = Simluation((Lx, Ly), (Nx, Ny), 1.4, 1, 214_000, (600, 0), Object_Mask)
 
 # Visualisatie setup
 plt.ion()
