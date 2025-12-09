@@ -126,7 +126,7 @@ class Simluation:
         self.uv = np.sqrt((np.square(u_new) + np.square(v_new)))    
         self.c = np.sqrt(np.clip(self.gamma*self.p/np.clip(rho_new, a_min=0.1, a_max=100), a_min=0, a_max=1000_000_000))
 
-        nu = 0.0 * self.dxy[0] * (self.uv + self.c)
+        nu = 0.05 * self.dxy[0] * (self.uv + self.c)
         for m in [rho_new, u_new, v_new, e_new]:
             # Calculate Laplacian (diffusion) using slicing
             laplacian = np.zeros_like(m)
@@ -152,7 +152,7 @@ class Simluation:
             laplacian[:, -1] = laplacian[:, -2]
             
             # Update with Diffusion
-            #m += nu * laplacian
+            m += nu * laplacian
 
         for m in [rho_new, u_new, v_new, e_new]:
             m[0, :] = m[1, :]

@@ -9,7 +9,7 @@ def object_mask(Nx, Ny, Lx, Ly, rot_deg):
     Object_Mask = np.zeros((Nx, Ny), dtype=bool)
 
     M = 0.06 # Maximaal camber in %
-    P = 0.40  # Maximaal camber positie in %
+    P = 0.10  # Maximaal camber positie in %
     T = 0.12 # Maximale dikte in %
     a0, a1, a2, a3, a4 = 0.2969, -0.126, -0.3156, 0.2843, -0.1015 #standaard NACA waarden
 
