@@ -30,7 +30,6 @@ fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(12, 5))
 im1 = ax1.imshow(sim.rho.T, origin='lower', extent=[0, Lx, 0, Ly], cmap='inferno', vmin=0.9999, vmax=1.0001)
 ax1.set_title("Density")
 plt.colorbar(im1, ax=ax1)
-
 im2 = ax2.imshow(sim.e.T, origin='lower', extent=[0, Lx, 0, Ly], cmap='inferno')
 ax2.set_title("Internal Energy")
 plt.colorbar(im2, ax=ax2)

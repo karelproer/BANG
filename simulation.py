@@ -151,7 +151,7 @@ class Simluation:
             laplacian[:, -1] = laplacian[:, -2]
             
             # Update with Diffusion
-            #m += nu * laplacian
+            m += nu * laplacian
 
         for m in [rho_new, u_new, v_new, e_new]:
             m[0, :] = m[1, :]
