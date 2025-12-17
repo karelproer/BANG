@@ -9,7 +9,7 @@ Nx, Ny = 300,300 #pixels
 Lx, Ly = 1.0, 1.0
 ax, ay = 0, 0.0
 dx, dy = Lx / Nx, Ly / Ny
-dt = 0.000001 # in seconden
+dt = 0.00001 # in seconden
 Nt = 400000
 gamma = 1.4
 rho0, e0 = 1, 214_000
@@ -44,7 +44,7 @@ for n in range(Nt):
 
     t = n * dt
     # Update plots elke paar stappen
-    if n % 1 == 0:
+    if n % 10 == 0:
         im1.set_clim([sim.rho.min(), sim.rho.max()])
         im2.set_clim([sim.e.min(), sim.e.max()])
         im3.set_clim([sim.u.min(), sim.u.max()])
@@ -56,8 +56,7 @@ for n in range(Nt):
         im3.set_data(sim.u.T)
         ax3.set_title(f"Speed at t = {t:.5f}s")
         text.set_text(f"Drag = {sim.drag:.2f} N     Lift = {sim.lift:.2f} N")
-
-        plt.pause(0.0000001)        
+        plt.pause(0.0001)        
         
 plt.ioff()
 

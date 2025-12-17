@@ -12,7 +12,7 @@ class Simluation:
 
         #normals wijzen van buiten naar object
         self.normals = []
-
+        
         for i in range(1, pixels[0]-1):
             for j in range(1, pixels[1] - 1):
                 if not object_mask[i, j]:
@@ -21,7 +21,7 @@ class Simluation:
                     if object_mask[i+1, j]: self.normals.append((i, j, +1, 0))   # right
                     if object_mask[i, j-1]: self.normals.append((i, j, 0, -1))   # down
                     if object_mask[i, j+1]: self.normals.append((i, j, 0, +1))   # up
-
+        
 
         self.mu = 1.8e-5        # Dynamic viscosity
         self.Pr = 0.72          # Prandtl number for air
@@ -39,7 +39,7 @@ class Simluation:
     @property
     def dxy(self):
         return self.size[0] / self.pixels[0], self.size[1] / self.pixels[1]
-
+    
     def deuler(self, vars):
         #implementatie euler vergelijkingen.
         #hier eventueel veranderen naar navier-stokes.
@@ -54,7 +54,7 @@ class Simluation:
 
         div_u = du_dx + dv_dy
 
-        Fx, Fy = rho * 300, rho * 0
+        Fx, Fy = rho * 0, rho * 0
 
         drho_dt = -(self.u * drho_dx + v * drho_dy + rho * div_u)
         du_dt = -(self.u * du_dx + v * du_dy + dp_dx / rho - Fx)
@@ -166,8 +166,9 @@ class Simluation:
         self.u[self.object_mask] = 0.0
         self.v[self.object_mask] = 0.0
         self.e[self.object_mask] = self.e0
-
+        
         self.drag, self.lift = 0, 0
         for (i, j, dx, dy) in self.normals:
             self.drag += self.p[i][j] * dx * self.dxy[0]
             self.lift += self.p[i][j] * dy * self.dxy[1]
+        
