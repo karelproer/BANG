@@ -84,4 +84,3 @@ def object_mask(Nx, Ny, Lx, Ly, rot_deg):
         Object_Mask = (x_wing >= 0) & (x_wing <= 1) & (y_wing <= y_upper) & (y_wing >= y_lower) 
 
     return Object_Mask
-    

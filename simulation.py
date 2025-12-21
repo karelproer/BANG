@@ -22,7 +22,6 @@ class Simluation:
                     if object_mask[i, j-1]: self.normals.append((i, j, 0, -1))   # down
                     if object_mask[i, j+1]: self.normals.append((i, j, 0, +1))   # up
         
-
         self.mu = 1.8e-5        # Dynamic viscosity
         self.Pr = 0.72          # Prandtl number for air
         self.kappa = self.mu * self.gamma / self.Pr
@@ -160,7 +159,6 @@ class Simluation:
             m[:, 0] = m[:, 1]
             m[:, -1] = m[:, -2]
         
-
         self.rho, self.u, self.v, self.e = rho_new, u_new, v_new, e_new
         self.rho[self.object_mask] = self.rho0
         self.u[self.object_mask] = 0.0
@@ -171,4 +169,3 @@ class Simluation:
         for (i, j, dx, dy) in self.normals:
             self.drag += self.p[i][j] * dx * self.dxy[0]
             self.lift += self.p[i][j] * dy * self.dxy[1]
-        
