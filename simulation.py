@@ -159,8 +159,7 @@ class Simluation:
             m[-1, :] = m[-2, :]
             m[:, 0] = m[:, 1]
             m[:, -1] = m[:, -2]
-        
-        # zet de waarden naar standaard waar de vleugel zit (dit doet hetzelfde als een echte vleugel in het echt zou doen)
+        # zet de waarden naar standaard waar de vleugel zit (dit doet hetzelfde als een echte vleugel in het echt zou doen)        
         self.rho, self.u, self.v, self.e = rho_new, u_new, v_new, e_new
         self.rho[self.object_mask] = self.rho0
         self.u[self.object_mask] = 0.0

@@ -9,10 +9,10 @@ Nx, Ny = 300,300 #pixels
 Lx, Ly = 1.0, 1.0 # groote van gesimuleerde gebied
 dx, dy = Lx / Nx, Ly / Ny
 dt = 0.00001 # in seconden
-Nt = 400000 # totaal aantal tijdstappen
-gamma = 1.4 # verhouding warmtecapaciteiten (parameter van lucht)
-rho0, e0 = 1, 214_000 # initieele dichtheid en temperatuur
-rot_deg = 0 #draaing van vluegel
+Nt = 400000
+gamma = 1.4
+rho0, e0 = 1, 214_000
+rot_deg = -5
 
 # Rooster
 x = np.linspace(0, Lx, Nx)
