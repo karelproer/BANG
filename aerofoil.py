@@ -23,7 +23,7 @@ def object_mask(Nx, Ny, Lx, Ly, rot_deg):
     Xs = X - x0
     Ys = Y - y0
 
-    # rotate grid into wing coordinates
+    # laat de vleugel draaien
     Xr =  Xs*np.cos(alpha) + Ys*np.sin(alpha)
     Yr = -Xs*np.sin(alpha) + Ys*np.cos(alpha)
 
@@ -31,7 +31,7 @@ def object_mask(Nx, Ny, Lx, Ly, rot_deg):
     x_wing = Xr / 0.5
     y_wing = Yr / 0.5
   
-    # make safe copy to avoid sqrt issues at x=0
+    # clipt de vleugel voor een meer preciese vorm
     xch = np.clip(x_wing, 0.0, 1.0)
 
     if M != 0 and P != 0:
