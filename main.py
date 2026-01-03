@@ -6,7 +6,7 @@ from simulation import Simluation
 
 # Parameters
 Nx, Ny = 300,300 #pixels
-Lx, Ly = 1.0, 1.0 # groote van gesimuleerde gebied
+Lx, Ly = 1.0, 1.0 # groote van het gesimuleerde gebied
 dx, dy = Lx / Nx, Ly / Ny
 dt = 0.00001 # in seconden
 Nt = 400000
@@ -19,7 +19,7 @@ x = np.linspace(0, Lx, Nx)
 y = np.linspace(0, Ly, Ny)
 X, Y = np.meshgrid(x, y, indexing='ij')
 
-Object_Mask= object_mask(Nx, Ny, Lx, Ly, rot_deg) # pixels waar de vluegel is
+Object_Mask= object_mask(Nx, Ny, Lx, Ly, rot_deg) # pixels waar de vleugel is
 
 # simulatie object
 sim = Simluation((Lx, Ly), (Nx, Ny), 1.4, 1, 214_000, (100, 0), Object_Mask)

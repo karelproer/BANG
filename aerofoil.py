@@ -31,7 +31,7 @@ def object_mask(Nx, Ny, Lx, Ly, rot_deg):
     x_wing = Xr / 0.5
     y_wing = Yr / 0.5
   
-    # clipt de vleugel voor een meer preciese vorm
+    # clipt de vleugel voor een meer precieze vorm
     xch = np.clip(x_wing, 0.0, 1.0)
 
     if M != 0 and P != 0:
@@ -60,7 +60,7 @@ def object_mask(Nx, Ny, Lx, Ly, rot_deg):
         # normal angle to camber line
         theta = np.arctan(dyc_dx)
 
-        # upper and lower surface coordinates (in wing-local coords)
+        # de randen van de vleugel
         y_upper = yc + yt * np.cos(theta)
         y_lower = yc - yt * np.cos(theta)
         x_upper = xch - yt * np.sin(theta)
