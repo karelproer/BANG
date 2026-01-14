@@ -38,6 +38,10 @@ class Simluation:
         self.uv = np.sqrt((np.square(self.u) + np.square(self.v)))
         self.e = np.ones(pixels) * e0
         self.p = np.multiply(self.rho, self.e) * (self.gamma - 1)
+        self.uv = np.sqrt((np.square(self.u) + np.square(self.v)))   
+         
+        self.c = np.sqrt(np.clip(self.gamma*self.p/np.clip(self.rho, a_min=0.1, a_max=100), a_min=0, a_max=1000_000_000))
+        self.mach = self.uv / self.c
 
     # tuple met dx en dy erin
     @property
@@ -172,3 +176,5 @@ class Simluation:
         for (i, j, dx, dy) in self.normals:
             self.drag += self.p[i][j] * dx * self.dxy[0]
             self.lift += self.p[i][j] * dy * self.dxy[1]
+
+        self.mach = self.uv / self.c

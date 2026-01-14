@@ -22,11 +22,11 @@ X, Y = np.meshgrid(x, y, indexing='ij')
 Object_Mask= object_mask(Nx, Ny, Lx, Ly, rot_deg) # pixels waar de vluegel is
 
 # simulatie object
-sim = Simluation((Lx, Ly), (Nx, Ny), 1.4, 1, 214_000, (100, 0), Object_Mask)
+sim = Simluation((Lx, Ly), (Nx, Ny), 1.4, 1, 214_000, (450, 0), Object_Mask)
 
 # Visualisatie
 plt.ion()
-fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(12, 5)) # drie plaatjes
+fig, (ax1, ax2, ax3, ax4) = plt.subplots(1, 4, figsize=(12, 5)) # drie plaatjes
 
 im1 = ax1.imshow(sim.rho.T, origin='lower', extent=[0, Lx, 0, Ly], cmap='inferno', vmin=0.9999, vmax=1.0001)
 ax1.set_title("Density")
@@ -37,6 +37,10 @@ plt.colorbar(im2, ax=ax2)
 im3 = ax3.imshow(sim.u.T, origin='lower', extent=[0, Lx, 0, Ly], cmap='inferno', vmin=0, vmax=1)
 ax3.set_title("Speed")
 plt.colorbar(im3, ax=ax3)
+im4 = ax4.imshow(sim.mach, origin='lower', extent=[0, Lx, 0, Ly], cmap='inferno', vmin=0, vmax=1.5)
+ax4.set_title("Mach Number")
+plt.colorbar(im4, ax=ax4)
+
 
 text = fig.text(0.5, 0.01, "", ha='center', va='bottom', fontsize=12, color='blue') # text die lift en weerstand laat zien
 
@@ -58,6 +62,8 @@ for n in range(Nt):
         ax2.set_title(f"Internal Energy at t = {t:.5f}s")
         im3.set_data(sim.u.T)
         ax3.set_title(f"Speed at t = {t:.5f}s")
+        im4.set_data(sim.mach.T)
+        ax4.set_title(f"Mach Number at t = {t:.5f}s")
         text.set_text(f"Drag = {sim.drag:.2f} N     Lift = {sim.lift:.2f} N")
         
         #wachten voor laten zien
