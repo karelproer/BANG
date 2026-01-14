@@ -11,7 +11,7 @@ class Simluation:
         self.e0 = e0
         self.object_mask = object_mask
 
-        #normals wijzen van buiten het obkect naar het object
+        #normals wijzen van buiten het object naar het object
         self.normals = []
         
         for i in range(1, pixels[0]-1):
@@ -28,7 +28,7 @@ class Simluation:
         self.Pr = 0.72          # Prandtl getal van lucht (hoeveelheid warmtestroom per viscositeit)
         self.kappa = self.mu * self.gamma / self.Pr # Absolute hoeveelheid warmtestroom
 
-        # hoelang sinds hbegin simualtie
+        # hoe lang sinds het begin van de simualtie
         self.time = 0
 
         # simulatiestaat initialiseren
