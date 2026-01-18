@@ -8,8 +8,8 @@ def object_mask(Nx, Ny, Lx, Ly, rot_deg):
 
     Object_Mask = np.zeros((Nx, Ny), dtype=bool)
 
-    M = 0.06 # Maximaal camber in %
-    P = 0.40  # Maximaal camber positie in %
+    M = 0.00 # Maximaal camber in %
+    P = 0.0  # Maximaal camber positie in %
     T = 0.12 # Maximale dikte in %
     a0, a1, a2, a3, a4 = 0.2969, -0.126, -0.3156, 0.2843, -0.1015 #standaard NACA waarden
 
@@ -72,10 +72,6 @@ def object_mask(Nx, Ny, Lx, Ly, rot_deg):
         #Voor symmetrische vleugels
         def naca00xx(x):
             return 5 * T * (0.2969*np.sqrt(x) - 0.1260*x - 0.3516*x**2 + 0.2843*x**3 - 0.1015*x**4)
-
-        # Schaal + positie vleugel
-        x_wing = (X - 0.3) / 0.5   # move/scale in x
-        y_wing = (Y - 0.5) / 0.5   # move/scale in y
 
         # Bovenste en onderste oppervlakte
         y_upper = naca00xx(x_wing)
