@@ -1,6 +1,7 @@
 import numpy as np
+import random as rd
 
-def object_mask(Nx, Ny, Lx, Ly, rot_deg):
+def object_mask(Nx, Ny, Lx, Ly, rot_deg, preset_number):
     # Raster
     x = np.linspace(0, Lx, Nx)
     y = np.linspace(0, Ly, Ny)
@@ -8,9 +9,36 @@ def object_mask(Nx, Ny, Lx, Ly, rot_deg):
 
     Object_Mask = np.zeros((Nx, Ny), dtype=bool)
 
-    m = 0.06 # Maximaal camber in %
-    p = 0.40  # Maximaal camber positie in %
-    t = 0.12 # Maximale dikte in %
+    if preset_number == 1:
+        m = 0.00 # Maximaal camber in %
+        p = 0.00  # Maximaal camber positie in %
+        t = 0.12 # Maximale dikte in %
+    
+    elif preset_number == 2:
+        m = 0.02
+        p = 0.40
+        t = 0.10
+
+    elif preset_number == 3:
+        m = 0.06
+        p = 0.40
+        t = 0.12
+
+    elif preset_number == 4:
+        m = 0.095
+        p = 0.40   
+        t = 0.02
+
+    elif preset_number == 5:
+        m = 0.02
+        p = 0.30
+        t = 0.21
+
+    else:
+        m = rd.uniform(0.0, 0.095)
+        p = rd.uniform(0.0, 0.9)
+        t = rd.uniform(0.01, 0.4)
+
     a0, a1, a2, a3, a4 = 0.2969, -0.126, -0.3156, 0.2843, -0.1015 #standaard NACA waarden
 
     # draaing van graden naar radialen
@@ -68,7 +96,7 @@ def object_mask(Nx, Ny, Lx, Ly, rot_deg):
 
         Object_Mask = (x_lower >= 0) & (x_upper <= 1) & (y_wing >= y_lower) & (y_wing <= y_upper)
 
-    if M == 0:
+    if m == 0:
         #Voor symmetrische vleugels
         def naca00xx(x):
             return 5 * t * (0.2969*np.sqrt(x) - 0.1260*x - 0.3516*x**2 + 0.2843*x**3 - 0.1015*x**4)
