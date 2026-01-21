@@ -8,9 +8,9 @@ def object_mask(Nx, Ny, Lx, Ly, rot_deg):
 
     Object_Mask = np.zeros((Nx, Ny), dtype=bool)
 
-    M = 0.00 # Maximaal camber in %
-    P = 0.0  # Maximaal camber positie in %
-    T = 0.12 # Maximale dikte in %
+    m = 0.06 # Maximaal camber in %
+    p = 0.40  # Maximaal camber positie in %
+    t = 0.12 # Maximale dikte in %
     a0, a1, a2, a3, a4 = 0.2969, -0.126, -0.3156, 0.2843, -0.1015 #standaard NACA waarden
 
     # draaing van graden naar radialen
@@ -34,22 +34,22 @@ def object_mask(Nx, Ny, Lx, Ly, rot_deg):
     # clipt de vleugel voor een meer precieze vorm
     xch = np.clip(x_wing, 0.0, 1.0)
 
-    if M != 0 and P != 0:
+    if m != 0 and p != 0:
         #voor niet-symmetrische vleugels
         # camber berekenen
         yc = np.zeros_like(xch)
-        left = xch <= P
+        left = xch <= p
         right = ~left
-        yc[left]  = (M / (P**2)) * (2*P*xch[left] - xch[left]**2)
-        yc[right] = (M / ((1-P)**2)) * ((1 - 2*P) + 2*P*xch[right] - xch[right]**2)
+        yc[left]  = (m / (p**2)) * (2*p*xch[left] - xch[left]**2)
+        yc[right] = (m / ((1-p)**2)) * ((1 - 2*p) + 2*p*xch[right] - xch[right]**2)
 
         # gradient berekenen
         dyc_dx = np.zeros_like(xch)
-        dyc_dx[left]  = (2*M / (P**2)) * (P - xch[left])
-        dyc_dx[right] = (2*M / ((1-P)**2)) * (P - xch[right])
+        dyc_dx[left]  = (2*m / (p**2)) * (p - xch[left])
+        dyc_dx[right] = (2*m / ((1-p)**2)) * (p - xch[right])
 
         # Dikte verspreiding volgens standaard waarden 
-        yt = (T / 0.2) * (
+        yt = (t / 0.2) * (
             a0 * np.sqrt(xch) +
             a1 * xch +
             a2 * xch**2 +
@@ -71,7 +71,7 @@ def object_mask(Nx, Ny, Lx, Ly, rot_deg):
     if M == 0:
         #Voor symmetrische vleugels
         def naca00xx(x):
-            return 5 * T * (0.2969*np.sqrt(x) - 0.1260*x - 0.3516*x**2 + 0.2843*x**3 - 0.1015*x**4)
+            return 5 * t * (0.2969*np.sqrt(x) - 0.1260*x - 0.3516*x**2 + 0.2843*x**3 - 0.1015*x**4)
 
         # Bovenste en onderste oppervlakte
         y_upper = naca00xx(x_wing)
