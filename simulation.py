@@ -9,6 +9,7 @@ class Simluation:
         self.gamma = gamma
         self.rho0 = rho0
         self.e0 = e0
+        self.v0 = v0
         self.object_mask = object_mask
 
         #normals wijzen van buiten het object naar het object
@@ -27,21 +28,27 @@ class Simluation:
         self.mu = 1.8e-5        # Viscositeit van lucht
         self.Pr = 0.72          # Prandtl getal van lucht (hoeveelheid warmtestroom per viscositeit)
         self.kappa = self.mu * self.gamma / self.Pr # Absolute hoeveelheid warmtestroom
+        self.reset(None)
+        
 
+    def reset(self, _):
         # hoe lang sinds het begin van de simualtie
         self.time = 0
 
         # simulatiestaat initialiseren
-        self.rho = np.ones(pixels) * rho0
-        self.u = np.ones(pixels) * v0[0]
-        self.v = np.ones(pixels) * v0[1]
+        self.rho = np.ones(self.pixels) * self.rho0
+        self.u = np.ones(self.pixels) * self.v0[0]
+        self.v = np.ones(self.pixels) * self.v0[1]
         self.uv = np.sqrt((np.square(self.u) + np.square(self.v)))
-        self.e = np.ones(pixels) * e0
+        self.e = np.ones(self.pixels) * self.e0
         self.p = np.multiply(self.rho, self.e) * (self.gamma - 1)
         self.uv = np.sqrt((np.square(self.u) + np.square(self.v)))   
          
         self.c = np.sqrt(np.clip(self.gamma*self.p/np.clip(self.rho, a_min=0.1, a_max=100), a_min=0, a_max=1000_000_000))
         self.mach = self.uv / self.c
+
+    def setObjectMask(self, object_mask):
+        self.object_mask = object_mask
 
     # tuple met dx en dy erin
     @property
@@ -124,6 +131,7 @@ class Simluation:
 
     # Ga een tijdstap verder in de simulaties
     def step(self, dt):
+        self.time += dt
         # maar een lijst van de simulatie states
         variables = np.array([self.rho, self.u, self.v, self.e])
 

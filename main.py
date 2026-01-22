@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from aerofoil import *
 from derivatives import *
 from simulation import Simluation
+from matplotlib.widgets import Button
 
 # Parameters
 Nx, Ny = 300,300 #pixels
@@ -19,7 +20,7 @@ x = np.linspace(0, Lx, Nx)
 y = np.linspace(0, Ly, Ny)
 X, Y = np.meshgrid(x, y, indexing='ij')
 
-Object_Mask= object_mask(Nx, Ny, Lx, Ly, rot_deg) # pixels waar de vleugel is
+Object_Mask= object_mask(Nx, Ny, Lx, Ly, rot_deg, 0) # pixels waar de vleugel is
 
 # simulatie object
 sim = Simluation((Lx, Ly), (Nx, Ny), 1.4, 1, 214_000, (450, 0), Object_Mask)
@@ -41,13 +42,31 @@ im4 = ax4.imshow(sim.mach, origin='lower', extent=[0, Lx, 0, Ly], cmap='inferno'
 ax4.set_title("Mach Number")
 plt.colorbar(im4, ax=ax4)
 
-
 text = fig.text(0.5, 0.01, "", ha='center', va='bottom', fontsize=12, color='blue') # text die lift en weerstand laat zien
+axreset = fig.add_axes([0.8, 0.05, 0.1, 0.075])
+axwings = fig.add_axes([0.8, 0.00, 0.1, 0.075])
+
+bnreset = Button(axreset, 'reset')
+bnreset.on_clicked(sim.reset)
+
+def preset(i):
+    def onpressed(_):
+        global Object_Mask
+        Object_Mask = object_mask(Nx, Ny, Lx, Ly, rot_deg, i)
+        sim.setObjectMask(Object_Mask)
+        sim.reset(None)
+    return onpressed
+
+bnwings = []
+for i in range(5):
+    bnwings += Button(axwings, f'preset {i}')
+    bnwings[i].on_clicked(preset(i))
+
 
 for n in range(Nt):
     sim.step(dt)
 
-    t = n * dt
+    t = sim.time
     # Update elke paar stappen
     if n % 10 == 0:
         # automatisch aanpassen kleuren aan uiterste waarden
