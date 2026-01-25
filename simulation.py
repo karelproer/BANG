@@ -123,10 +123,10 @@ class Simluation:
     # Neemt een gewogen gemiddelde van vier verschillende tijdstappen
     def rk4(self, u, h):
         # moet beter zijn dan direct euler
-        k1 = self.d(u)
-        k2 = self.d(u + h*k1/2)
-        k3 = self.d(u + h*k2/2)
-        k4 = self.d(u + h*k3)
+        k1 = self.deuler(u)
+        k2 = self.deuler(u + h*k1/2)
+        k3 = self.deuler(u + h*k2/2)
+        k4 = self.deuler(u + h*k3)
         return u + h/6*(k1 + 2*k2 + 2+k3 + k4)
 
     # Ga een tijdstap verder in de simulaties
