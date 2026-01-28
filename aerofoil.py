@@ -1,5 +1,8 @@
 import numpy as np
 import random as rd
+import warnings
+
+warnings.filterwarnings("ignore")
 
 def object_mask(Nx, Ny, Lx, Ly, rot_deg, preset_number):
     # Raster
@@ -99,7 +102,10 @@ def object_mask(Nx, Ny, Lx, Ly, rot_deg, preset_number):
     if m == 0:
         #Voor symmetrische vleugels
         def naca00xx(x):
-            return 5 * t * (0.2969*np.sqrt(x) - 0.1260*x - 0.3516*x**2 + 0.2843*x**3 - 0.1015*x**4)
+            try:
+                return 5 * t * (0.2969*np.sqrt(x) - 0.1260*x - 0.3516*x**2 + 0.2843*x**3 - 0.1015*x**4)
+            except e:
+                pass
 
         # Bovenste en onderste oppervlakte
         y_upper = naca00xx(x_wing)
