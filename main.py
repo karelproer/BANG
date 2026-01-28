@@ -29,6 +29,12 @@ sim = Simluation((Lx, Ly), (Nx, Ny), 1.4, 1, 214_000, (450, 0), Object_Mask)
 plt.ion()
 fig, (ax1, ax2, ax3, ax4) = plt.subplots(1, 4, figsize=(16, 9)) # drie plaatjes
 
+def on_close(event):
+    exit()
+
+fig.canvas.mpl_connect('close_event', on_close)
+
+
 im1 = ax1.imshow(sim.rho.T, origin='lower', extent=[0, Lx, 0, Ly], cmap='inferno', vmin=0.9999, vmax=1.0001)
 ax1.set_title("Density")
 plt.colorbar(im1, ax=ax1)
@@ -108,10 +114,5 @@ for n in range(Nt):
         
         #wachten voor laten zien
         plt.pause(0.0001)        
+        plt.show()
         
-# interactieve modus uit als simulatie afgelopen
-plt.ioff()
-
-
-if __name__ == "__main__":
-    plt.show()
