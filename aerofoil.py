@@ -34,9 +34,9 @@ def object_mask(Nx, Ny, Lx, Ly, rot_deg, preset_number):
         t = 0.02
 
     elif preset_number == 5:
-        m = 0.02
+        m = 0.06
         p = 0.30
-        t = 0.21
+        t = 0.38
 
     elif preset_number == -1:
         pass
