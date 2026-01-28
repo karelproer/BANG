@@ -5,6 +5,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 def object_mask(Nx, Ny, Lx, Ly, rot_deg, preset_number):
+    global m, p, t
     # Raster
     x = np.linspace(0, Lx, Nx)
     y = np.linspace(0, Ly, Ny)
@@ -37,6 +38,9 @@ def object_mask(Nx, Ny, Lx, Ly, rot_deg, preset_number):
         p = 0.30
         t = 0.21
 
+    elif preset_number == -1:
+        pass
+
     else:
         m = rd.uniform(0.0, 0.095)
         p = rd.uniform(0.0, 0.9)
@@ -45,17 +49,17 @@ def object_mask(Nx, Ny, Lx, Ly, rot_deg, preset_number):
     a0, a1, a2, a3, a4 = 0.2969, -0.126, -0.3156, 0.2843, -0.1015 #standaard NACA waarden
 
     # draaing van graden naar radialen
-    alpha = np.deg2rad(rot_deg)
+    alpha = np.deg2rad(-rot_deg)
 
     # Wingtip locatie
     x0, y0 = 0.3, 0.5
 
     # Naar midden verschuiven
-    Xs = X - x0
+    Xs = X - 0.5
     Ys = Y - y0
 
     # laat de vleugel draaien
-    Xr =  Xs*np.cos(alpha) + Ys*np.sin(alpha)
+    Xr =  Xs*np.cos(alpha) + Ys*np.sin(alpha) + 0.5 - x0
     Yr = -Xs*np.sin(alpha) + Ys*np.cos(alpha)
 
     # schaal

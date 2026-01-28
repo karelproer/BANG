@@ -13,7 +13,7 @@ dt = 0.00001 # in seconden
 Nt = 400000
 gamma = 1.4
 rho0, e0 = 1, 214_000
-rot_deg = -5
+rot_deg = 0
 
 # Rooster
 x = np.linspace(0, Lx, Nx)
@@ -46,6 +46,7 @@ text = fig.text(0.47, 0.1, "", ha='center', va='bottom', fontsize=12, color='blu
 axrandom = fig.add_axes([0.1, 0.06, 0.1, 0.04])
 axreset = fig.add_axes([0.8, 0.06, 0.1, 0.04])
 axspeed = fig.add_axes([0.3, 0.06, 0.4, 0.04])
+axrot = fig.add_axes([0.3, 0.94, 0.4, 0.04])
 
 def preset(i):
     def onpressed(_):
@@ -59,12 +60,22 @@ def set_speed(val):
     sim.v0 = (val, 0)
     sim.reset(None)
 
+def set_rot(val):
+    global rot_deg
+    global Object_Mask
+    rot_deg = val
+    Object_Mask = object_mask(Nx, Ny, Lx, Ly, rot_deg, -1)
+    sim.setObjectMask(Object_Mask)
+    sim.reset(None)
+
 bnreset = Button(axreset, 'reset')
 bnreset.on_clicked(sim.reset)
 bnrandom = Button(axrandom, 'random')
 bnrandom.on_clicked(preset(6))
 sldspeed = Slider(axspeed, 'speed', 0, 500, valinit=343)
 sldspeed.on_changed(set_speed)
+sldrot = Slider(axrot, 'rotation', -180, 180, valinit=0)
+sldrot.on_changed(set_rot)
 
 bnwings = []
 for i in range(5):
