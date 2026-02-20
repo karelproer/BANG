@@ -9,4 +9,5 @@ Find the github release page for BANG and download the correct BANG file (BANG.e
 
 ## How to operate BANG
 ![Screenshot of the simulation](Afbeelding1.png)
+
 In the above screenshot 
